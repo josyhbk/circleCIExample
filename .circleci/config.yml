@@ -13,6 +13,8 @@ jobs:
             echo "displaying directories"
             ls -la
             echo "creating a file that won't persist" >> file.txt
+            echo "displaying working context"
+            echo $coolVar
   thisCouldBeAnyName:
     machine: true
     working_directory: ~/coolFolder
@@ -48,9 +50,21 @@ jobs:
           name: displaying files
           command: |
             ls -la
+            echo "displaying working context"
+            echo $coolVar
+  showingFiles:
+    machine: true
+    working_directory: ~/myJobFolder
+    steps:
+      - run:
+          name: this will trigger only with myBranch
+          command: |
+            ls -la
+            echo "displaying working context"
+            echo $coolVar            
 workflows:
   version: 2
-  CoolWorkFLow:
+  Cool-WorkFlow:
     jobs:
       - job1
       - thisCouldBeAnyName:
@@ -73,3 +87,11 @@ workflows:
             branches:
               only: master
           context: prod
+
+  Other-Cool-Flow:
+    jobs:
+      - youHad-1-job:
+          filters:
+            branches:
+              only: myBranch
+          context: dev
