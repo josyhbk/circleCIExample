@@ -15,6 +15,7 @@ jobs:
             echo "creating a file that won't persist" >> file.txt
             echo "displaying working context"
             echo $coolVar
+
   thisCouldBeAnyName:
     machine: true
     working_directory: ~/coolFolder
@@ -67,7 +68,11 @@ workflows:
   version: 2
   Cool-WorkFlow:
     jobs:
-      - job1
+      - job1:
+          filters:
+            branches:
+              only: master
+          context: dev        
       - thisCouldBeAnyName:
           requires:
             - job1
