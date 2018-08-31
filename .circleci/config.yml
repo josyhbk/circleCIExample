@@ -52,7 +52,8 @@ jobs:
             ls -la
             echo "displaying working context"
             echo $coolVar
-  showingFiles:
+
+  youHad-1-job:
     machine: true
     working_directory: ~/myJobFolder
     steps:
@@ -60,8 +61,8 @@ jobs:
           name: this will trigger only with myBranch
           command: |
             ls -la
-            echo "displaying working context"
-            echo $coolVar            
+            echo "this should be running only when commiting myBranch"
+            echo "this is the environment: " $coolVar
 workflows:
   version: 2
   Cool-WorkFlow:
