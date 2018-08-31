@@ -1,0 +1,75 @@
+version: 2
+jobs:
+  job1:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: Installing Dependencies
+          command: |
+            sudo apt-get update
+            echo "Doing some cool stuff"
+            echo "displaying directories"
+            ls -la
+            echo "creating a file that won't persist" >> file.txt
+  thisCouldBeAnyName:
+    machine: true
+    working_directory: ~/coolFolder
+    steps:
+      - run:
+          name: displaying things
+          command: |
+            echo "displaying files in home folder"
+            ls -la
+            pwd
+      - run:
+          name: creating a file that will persist
+          command: |
+            sha=$CIRCLE_SHA1
+            TAG=${sha:0:7}
+            echo "image tag:" $TAG >> tag.txt
+      - run:
+          name: print working dir
+          command: |
+            pwd
+            ls -la
+      - persist_to_workspace:
+          root: ~/coolFolder
+          paths:
+            - .
+  showingFiles:
+    machine: true
+    working_directory: ~/coolFolder
+    steps:
+      - attach_workspace:
+          at: ~/coolFolder
+      - run:
+          name: displaying files
+          command: |
+            ls -la
+workflows:
+  version: 2
+  CoolWorkFLow:
+    jobs:
+      - job1
+      - thisCouldBeAnyName:
+          requires:
+            - job1
+          filters:
+            branches:
+              only: master
+          context: dev
+      - hold:
+          type: approval
+          filters:
+            branches:
+              only: master
+      - showingFiles:
+          requires:
+            - thisCouldBeAnyName
+            - hold
+          filters:
+            branches:
+              only: master
+          context: prod
