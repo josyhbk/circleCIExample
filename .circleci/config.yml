@@ -72,7 +72,7 @@ workflows:
           filters:
             branches:
               only: master
-          context: dev        
+          context: dev
       - thisCouldBeAnyName:
           requires:
             - job1
@@ -99,5 +99,6 @@ workflows:
       - youHad-1-job:
           filters:
             branches:
-              only: myBranch
+              - secondBranch
+              - myBranch
           context: dev
