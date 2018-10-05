@@ -71,34 +71,29 @@ workflows:
       - job1:
           filters:
             branches:
-              only: master
+              - master
+              - secondBranch
           context: dev
       - thisCouldBeAnyName:
           requires:
             - job1
           filters:
             branches:
-              only: master
+              - master
+              - secondBranch
           context: dev
       - hold:
           type: approval
           filters:
             branches:
-              only: master
+              - master
+              - secondBranch
       - showingFiles:
           requires:
             - thisCouldBeAnyName
             - hold
           filters:
             branches:
-              only: master
-          context: prod
-
-  Other-Cool-Flow:
-    jobs:
-      - youHad-1-job:
-          filters:
-            branches:
+              - master
               - secondBranch
-              - myBranch
-          context: dev
+          context: prod
